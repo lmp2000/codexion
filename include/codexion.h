@@ -47,6 +47,21 @@ typedef struct s_dongle
 	pthread_mutex_t	mutex;
 }	t_dongle;
 
+typedef struct s_request
+{
+	int		coder_id;
+	long	request_time;
+	long	deadline;
+}	t_request;
+
+typedef struct s_heap
+{
+	t_request	*items;
+	int			size;
+	int			capacity;
+	t_scheduler	type;
+}	t_heap;
+
 struct s_sim // the process
 {
 	t_config		config;
@@ -57,6 +72,7 @@ struct s_sim // the process
     pthread_t		monitor_thread;
     t_coder		    *coders;
     t_dongle		*dongles;
+    t_heap			scheduler;
 };
 
 int	    parse_args(int argc, char **argv, t_config *config);
@@ -77,5 +93,14 @@ int		init_dongles(t_sim *sim);
 void	destroy_dongles(t_sim *sim);
 int		acquire_dongles(t_coder *coder, int *first, int *second);
 void	release_dongles(t_coder *coder, int first, int second);
+int		heap_init(t_heap *heap, int capacity, t_scheduler type);
+void	heap_destroy(t_heap *heap);
+int		heap_push(t_heap *heap, t_request request);
+int		heap_pop(t_heap *heap, t_request *out);
+int		heap_peek(t_heap *heap, t_request *out);
+int		heap_is_empty(t_heap *heap);
+int		scheduler_submit_request(t_coder *coder);
+int		scheduler_wait_turn(t_coder *coder);
+void	scheduler_complete_request(t_coder *coder);
 
 #endif

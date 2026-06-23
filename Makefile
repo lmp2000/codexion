@@ -15,7 +15,9 @@ SRC = \
 	src/state.c \
 	src/coder_state.c \
 	src/monitor.c \
-	src/dongle.c
+	src/dongle.c \
+	src/heap.c \
+	src/scheduler.c
 
 OBJ = $(SRC:.c=.o)
 

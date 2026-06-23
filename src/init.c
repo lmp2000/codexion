@@ -41,5 +41,8 @@ int	init_sim(t_sim *sim, t_config *config)
 		return (1);
     if (init_dongles(sim) != 0)
 	    return (1);
+    if (heap_init(&sim->scheduler, sim->config.number_of_coders,
+		sim->config.scheduler) != 0)
+	    return (1);
 	return (0);
 }

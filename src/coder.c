@@ -5,12 +5,20 @@ static void	coder_compile(t_coder *coder)
 	int	first;
 	int	second;
 
-	if (acquire_dongles(coder, &first, &second) != 0)
+	if (scheduler_submit_request(coder) != 0)
 		return ;
+	if (scheduler_wait_turn(coder) != 0)
+		return ;
+	if (acquire_dongles(coder, &first, &second) != 0)
+	{
+		scheduler_complete_request(coder);
+		return ;
+	}
 	update_coder_compile_state(coder);
 	log_state(coder->sim, coder->id, "is compiling");
 	precise_sleep(coder->sim->config.time_to_compile, coder->sim);
 	release_dongles(coder, first, second);
+	scheduler_complete_request(coder);
 }
 
 static void	coder_debug(t_coder *coder)

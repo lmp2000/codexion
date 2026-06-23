@@ -4,6 +4,7 @@ void	destroy_sim(t_sim *sim)
 {
 	int	i;
 
+    heap_destroy(&sim->scheduler);
     destroy_dongles(sim);
 	if (sim->coders)
 	{
