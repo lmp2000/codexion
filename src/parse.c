@@ -1,5 +1,14 @@
 #include "codexion.h"
 
+static int	validate_config(t_config *config)
+{
+	if (config->number_of_coders <= 0)
+		return (1);
+	if (config->number_of_compiles_required <= 0)
+		return (1);
+	return (0);
+}
+
 static int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
@@ -93,5 +102,7 @@ int	parse_args(int argc, char **argv, t_config *config)
 		return (1);
 	if (parse_scheduler(argv[8], &config->scheduler) != 0)
 		return (1);
+    if (validate_config(config) != 0)
+	    return (1);
 	return (0);
 }

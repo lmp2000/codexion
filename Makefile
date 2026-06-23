@@ -5,7 +5,17 @@ CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRC = \
 	src/main.c \
-	src/parse.c
+	src/parse.c \
+	src/time.c \
+	src/init.c \
+	src/cleanup.c \
+	src/log.c \
+	src/simulation.c \
+	src/coder.c \
+	src/state.c \
+	src/coder_state.c \
+	src/monitor.c \
+	src/dongle.c
 
 OBJ = $(SRC:.c=.o)
 
