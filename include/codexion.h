@@ -69,6 +69,8 @@ struct s_sim // the process
     int				stop;
 	pthread_mutex_t	log_mutex;
     pthread_mutex_t	state_mutex;
+    pthread_mutex_t	scheduler_mutex;
+    pthread_cond_t	scheduler_cond; 
     pthread_t		monitor_thread;
     t_coder		    *coders;
     t_dongle		*dongles;

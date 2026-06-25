@@ -15,12 +15,12 @@ int	main(int argc, char **argv)
 		printf("Error: simulation init failed\n");
 		return (1);
 	}
-    if (start_simulation(&sim) != 0)
-    {
-	    printf("Error: simulation failed\n");
-	    destroy_sim(&sim);
-	    return (1);
-    }
+	if (start_simulation(&sim) != 0)
+	{
+		printf("Error: simulation failed\n");
+		destroy_sim(&sim);
+		return (1);
+	}
 	destroy_sim(&sim);
 	return (0);
 }

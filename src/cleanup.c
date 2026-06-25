@@ -4,8 +4,8 @@ void	destroy_sim(t_sim *sim)
 {
 	int	i;
 
-    heap_destroy(&sim->scheduler);
-    destroy_dongles(sim);
+	heap_destroy(&sim->scheduler);
+	destroy_dongles(sim);
 	if (sim->coders)
 	{
 		i = 0;
@@ -16,6 +16,8 @@ void	destroy_sim(t_sim *sim)
 		}
 		free(sim->coders);
 	}
+	pthread_cond_destroy(&sim->scheduler_cond);
+	pthread_mutex_destroy(&sim->scheduler_mutex);
 	pthread_mutex_destroy(&sim->state_mutex);
 	pthread_mutex_destroy(&sim->log_mutex);
 }

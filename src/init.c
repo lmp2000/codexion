@@ -25,7 +25,7 @@ int	init_sim(t_sim *sim, t_config *config)
 {
 	sim->config = *config;
 	sim->coders = NULL;
-    sim->dongles = NULL;
+	sim->dongles = NULL;
 	sim->stop = 0;
 	sim->start_time = get_time_ms();
 	if (sim->start_time < 0)
@@ -37,12 +37,25 @@ int	init_sim(t_sim *sim, t_config *config)
 		pthread_mutex_destroy(&sim->log_mutex);
 		return (1);
 	}
+	if (pthread_mutex_init(&sim->scheduler_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->state_mutex);
+		pthread_mutex_destroy(&sim->log_mutex);
+		return (1);
+	}
+	if (pthread_cond_init(&sim->scheduler_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->scheduler_mutex);
+		pthread_mutex_destroy(&sim->state_mutex);
+		pthread_mutex_destroy(&sim->log_mutex);
+		return (1);
+	}
 	if (init_coders(sim) != 0)
 		return (1);
-    if (init_dongles(sim) != 0)
-	    return (1);
-    if (heap_init(&sim->scheduler, sim->config.number_of_coders,
-		sim->config.scheduler) != 0)
-	    return (1);
+	if (init_dongles(sim) != 0)
+		return (1);
+	if (heap_init(&sim->scheduler, sim->config.number_of_coders,
+			sim->config.scheduler) != 0)
+		return (1);
 	return (0);
 }
