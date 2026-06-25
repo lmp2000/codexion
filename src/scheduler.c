@@ -36,6 +36,8 @@ int	scheduler_wait_turn(t_coder *coder)
 		if (heap_peek(&coder->sim->scheduler, &top) == 0
 			&& top.coder_id == coder->id)
 		{
+			heap_pop(&coder->sim->scheduler, &top);
+			pthread_cond_broadcast(&coder->sim->scheduler_cond);
 			pthread_mutex_unlock(&coder->sim->scheduler_mutex);
 			return (0);
 		}
@@ -48,12 +50,7 @@ int	scheduler_wait_turn(t_coder *coder)
 
 void	scheduler_complete_request(t_coder *coder)
 {
-	t_request	top;
-
 	pthread_mutex_lock(&coder->sim->scheduler_mutex);
-	if (heap_peek(&coder->sim->scheduler, &top) == 0
-		&& top.coder_id == coder->id)
-		heap_pop(&coder->sim->scheduler, &top);
 	pthread_cond_broadcast(&coder->sim->scheduler_cond);
 	pthread_mutex_unlock(&coder->sim->scheduler_mutex);
 }
