@@ -34,6 +34,7 @@ typedef struct s_coder // the threads
 	pthread_t		thread;
 	long			last_compile_time;
 	int				compile_count;
+	int				mutex_ready;
 	pthread_mutex_t	mutex;
 	t_sim			*sim;
 }	t_coder;
@@ -66,15 +67,19 @@ struct s_sim // the process
 {
 	t_config		config;
 	long			start_time;
-    int				stop;
+	int				stop;
+	int				log_mutex_ready;
+	int				state_mutex_ready;
+	int				scheduler_mutex_ready;
+	int				scheduler_cond_ready;
 	pthread_mutex_t	log_mutex;
-    pthread_mutex_t	state_mutex;
-    pthread_mutex_t	scheduler_mutex;
-    pthread_cond_t	scheduler_cond; 
-    pthread_t		monitor_thread;
-    t_coder		    *coders;
-    t_dongle		*dongles;
-    t_heap			scheduler;
+	pthread_mutex_t	state_mutex;
+	pthread_mutex_t	scheduler_mutex;
+	pthread_cond_t	scheduler_cond;
+	pthread_t		monitor_thread;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	t_heap			scheduler;
 };
 
 int	    parse_args(int argc, char **argv, t_config *config);
