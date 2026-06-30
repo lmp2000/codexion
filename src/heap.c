@@ -12,11 +12,17 @@ static int	request_is_before(t_heap *heap, t_request a, t_request b)
 	long	priority_a;
 	long	priority_b;
 
+	if (heap->type == CODEXION_SCHED_FIFO)
+		return (a.seq < b.seq);
 	priority_a = request_priority(heap, a);
 	priority_b = request_priority(heap, b);
 	if (priority_a < priority_b)
 		return (1);
 	if (priority_a > priority_b)
+		return (0);
+	if (a.seq < b.seq)
+		return (1);
+	if (a.seq > b.seq)
 		return (0);
 	return (a.coder_id < b.coder_id);
 }
@@ -28,6 +34,29 @@ static void	swap_requests(t_request *a, t_request *b)
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
+}
+
+static void	rebuild_heap(t_heap *heap)
+{
+	int	child;
+	int	parent;
+	int	i;
+
+	i = 1;
+	while (i < heap->size)
+	{
+		child = i;
+		while (child > 0)
+		{
+			parent = (child - 1) / 2;
+			if (!request_is_before(heap, heap->items[child],
+					heap->items[parent]))
+				break ;
+			swap_requests(&heap->items[child], &heap->items[parent]);
+			child = parent;
+		}
+		i++;
+	}
 }
 
 int	heap_init(t_heap *heap, int capacity, t_scheduler type)
@@ -123,4 +152,26 @@ int	heap_peek(t_heap *heap, t_request *out)
 int	heap_is_empty(t_heap *heap)
 {
 	return (heap->size == 0);
+}
+
+int	heap_remove_coder(t_heap *heap, int coder_id, t_request *out)
+{
+	int	i;
+
+	i = 0;
+	while (i < heap->size)
+	{
+		if (heap->items[i].coder_id == coder_id)
+		{
+			if (out)
+				*out = heap->items[i];
+			heap->size--;
+			if (i < heap->size)
+				heap->items[i] = heap->items[heap->size];
+			rebuild_heap(heap);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
 }

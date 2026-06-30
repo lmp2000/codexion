@@ -26,10 +26,9 @@ static int	check_burnout(t_sim *sim)
 	while (i < sim->config.number_of_coders)
 	{
 		last_compile_time = get_coder_last_compile_time(&sim->coders[i]);
-		if (now - last_compile_time > sim->config.time_to_burnout)
+		if (now - last_compile_time >= sim->config.time_to_burnout)
 		{
-			log_state(sim, sim->coders[i].id, "burned out");
-			set_sim_stop(sim);
+			log_burnout(sim, sim->coders[i].id);
 			return (1);
 		}
 		i++;

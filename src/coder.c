@@ -17,6 +17,8 @@ static void	coder_compile(t_coder *coder)
 	update_coder_compile_state(coder);
 	log_state(coder->sim, coder->id, "is compiling");
 	precise_sleep(coder->sim->config.time_to_compile, coder->sim);
+	if (!sim_should_stop(coder->sim))
+		complete_coder_compile(coder);
 	release_dongles(coder, first, second);
 	scheduler_complete_request(coder);
 }

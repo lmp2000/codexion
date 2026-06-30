@@ -4,6 +4,12 @@ void	update_coder_compile_state(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->mutex);
 	coder->last_compile_time = get_time_ms();
+	pthread_mutex_unlock(&coder->mutex);
+}
+
+void	complete_coder_compile(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->mutex);
 	coder->compile_count++;
 	pthread_mutex_unlock(&coder->mutex);
 }

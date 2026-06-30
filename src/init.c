@@ -38,6 +38,7 @@ int	init_sim(t_sim *sim, t_config *config)
 	sim->scheduler.items = NULL;
 	sim->scheduler.size = 0;
 	sim->scheduler.capacity = 0;
+	sim->next_request_seq = 0;
 	sim->log_mutex_ready = 0;
 	sim->state_mutex_ready = 0;
 	sim->scheduler_mutex_ready = 0;

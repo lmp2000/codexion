@@ -50,10 +50,11 @@ typedef struct s_dongle
 
 typedef struct s_request
 {
-	int		coder_id;
-	long	request_time;
-	long	deadline;
-}	t_request;
+	int				coder_id;
+	long			request_time;
+	long			deadline;
+	unsigned long	seq;
+} t_request;
 
 typedef struct s_heap
 {
@@ -80,6 +81,7 @@ struct s_sim // the process
 	t_coder			*coders;
 	t_dongle		*dongles;
 	t_heap			scheduler;
+	unsigned long	next_request_seq;
 };
 
 int	    parse_args(int argc, char **argv, t_config *config);
@@ -87,12 +89,14 @@ long	get_time_ms(void);
 int		init_sim(t_sim *sim, t_config *config);
 void	destroy_sim(t_sim *sim);
 void	log_state(t_sim *sim, int coder_id, char *message);
+int		log_burnout(t_sim *sim, int coder_id);
 int		start_simulation(t_sim *sim);
 void	*coder_routine(void *arg);
 int		sim_should_stop(t_sim *sim);
 void	set_sim_stop(t_sim *sim);
 void	precise_sleep(long duration_ms, t_sim *sim);
 void	update_coder_compile_state(t_coder *coder);
+void	complete_coder_compile(t_coder *coder);
 long	get_coder_last_compile_time(t_coder *coder);
 int		get_coder_compile_count(t_coder *coder);
 void	*monitor_routine(void *arg);
@@ -105,6 +109,7 @@ void	heap_destroy(t_heap *heap);
 int		heap_push(t_heap *heap, t_request request);
 int		heap_pop(t_heap *heap, t_request *out);
 int		heap_peek(t_heap *heap, t_request *out);
+int		heap_remove_coder(t_heap *heap, int coder_id, t_request *out);
 int		heap_is_empty(t_heap *heap);
 int		scheduler_submit_request(t_coder *coder);
 int		scheduler_wait_turn(t_coder *coder);

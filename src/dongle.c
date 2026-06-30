@@ -89,40 +89,43 @@ static void	unlock_taken_dongle(t_coder *coder, int index)
 
 int	acquire_dongles(t_coder *coder, int *first, int *second)
 {
-	int	i;
+	int	left;
+	int	right;
 
 	*first = -1;
 	*second = -1;
-	while (!sim_should_stop(coder->sim))
+	left = coder->id - 1;
+	right = coder->id % coder->sim->config.number_of_coders;
+	if (left == right)
 	{
-		i = 0;
-		while (i < coder->sim->config.number_of_coders)
+		if (try_take_dongle(coder, left))
 		{
-			if (*first == -1 && try_take_dongle(coder, i))
-				*first = i;
-			else if (i != *first && try_take_dongle(coder, i))
-			{
-				*second = i;
-                log_state(coder->sim, coder->id, "has taken a dongle");
-				log_state(coder->sim, coder->id, "has taken a dongle");
-				return (0);
-			}
-			i++;
+			*first = left;
+			log_state(coder->sim, coder->id, "has taken a dongle");
 		}
+		while (!sim_should_stop(coder->sim))
+			usleep(500);
 		if (*first != -1)
 		{
 			unlock_taken_dongle(coder, *first);
 			*first = -1;
 		}
-		usleep(500);
+		return (1);
 	}
-	return (1);
+	*first = left;
+	*second = right;
+	log_state(coder->sim, coder->id, "has taken a dongle");
+	log_state(coder->sim, coder->id, "has taken a dongle");
+	return (0);
 }
 
 void	release_dongles(t_coder *coder, int first, int second)
 {
+	pthread_mutex_lock(&coder->sim->scheduler_mutex);
 	if (first >= 0)
 		unlock_taken_dongle(coder, first);
 	if (second >= 0)
 		unlock_taken_dongle(coder, second);
+	pthread_cond_broadcast(&coder->sim->scheduler_cond);
+	pthread_mutex_unlock(&coder->sim->scheduler_mutex);
 }
