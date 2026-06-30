@@ -103,10 +103,10 @@ static int	higher_ready_conflict(t_coder *coder, t_request request)
 	while (i < coder->sim->scheduler.size)
 	{
 		other = coder->sim->scheduler.items[i];
-		if (other.coder_id != request.coder_id
-			&& request_before(coder->sim, other, request)
-			&& share_dongle(coder->sim, other.coder_id, request.coder_id)
-			&& coder_dongles_ready(coder->sim, other.coder_id))
+		if (other.coder_id != request.coder_id && request_before(coder->sim,
+				other, request) && share_dongle(coder->sim, other.coder_id,
+				request.coder_id) && coder_dongles_ready(coder->sim,
+				other.coder_id))
 			return (1);
 		i++;
 	}

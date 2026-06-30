@@ -7,8 +7,7 @@ static int	all_coders_completed(t_sim *sim)
 	i = 0;
 	while (i < sim->config.number_of_coders)
 	{
-		if (get_coder_compile_count(&sim->coders[i])
-			< sim->config.number_of_compiles_required)
+		if (get_coder_compile_count(&sim->coders[i]) < sim->config.number_of_compiles_required)
 			return (0);
 		i++;
 	}
@@ -38,7 +37,7 @@ static int	check_burnout(t_sim *sim)
 
 void	*monitor_routine(void *arg)
 {
-	t_sim	*sim;
+	t_sim *sim;
 
 	sim = (t_sim *)arg;
 	while (!sim_should_stop(sim))

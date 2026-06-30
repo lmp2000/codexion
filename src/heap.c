@@ -114,11 +114,11 @@ static void	heap_bubble_down(t_heap *heap, int index)
 		left = (index * 2) + 1;
 		right = (index * 2) + 2;
 		best = index;
-		if (left < heap->size
-			&& request_is_before(heap, heap->items[left], heap->items[best]))
+		if (left < heap->size && request_is_before(heap, heap->items[left],
+				heap->items[best]))
 			best = left;
-		if (right < heap->size
-			&& request_is_before(heap, heap->items[right], heap->items[best]))
+		if (right < heap->size && request_is_before(heap, heap->items[right],
+				heap->items[best]))
 			best = right;
 		if (best == index)
 			break ;
@@ -156,7 +156,7 @@ int	heap_is_empty(t_heap *heap)
 
 int	heap_remove_coder(t_heap *heap, int coder_id, t_request *out)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (i < heap->size)

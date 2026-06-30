@@ -8,8 +8,8 @@ static int	create_coder_threads(t_sim *sim, int *created_count)
 	i = 0;
 	while (i < sim->config.number_of_coders)
 	{
-		if (pthread_create(&sim->coders[i].thread, NULL,
-				coder_routine, &sim->coders[i]) != 0)
+		if (pthread_create(&sim->coders[i].thread, NULL, coder_routine,
+				&sim->coders[i]) != 0)
 		{
 			set_sim_stop(sim);
 			pthread_mutex_lock(&sim->scheduler_mutex);
@@ -37,7 +37,7 @@ static void	join_coder_threads(t_sim *sim, int count)
 
 int	start_simulation(t_sim *sim)
 {
-	int	created_count;
+	int created_count;
 
 	if (create_coder_threads(sim, &created_count) != 0)
 	{

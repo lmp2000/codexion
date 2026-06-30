@@ -2,8 +2,8 @@
 
 int	main(int argc, char **argv)
 {
-	t_config	config;
-	t_sim		sim;
+	t_config config;
+	t_sim sim;
 
 	if (parse_args(argc, argv, &config) != 0)
 	{

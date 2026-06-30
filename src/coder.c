@@ -41,8 +41,7 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	while (!sim_should_stop(coder->sim)
-		&& get_coder_compile_count(coder)
-		< coder->sim->config.number_of_compiles_required)
+		&& get_coder_compile_count(coder) < coder->sim->config.number_of_compiles_required)
 	{
 		coder_compile(coder);
 		if (sim_should_stop(coder->sim))

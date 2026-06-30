@@ -8,19 +8,19 @@ static int	init_coders(t_sim *sim)
 	if (!sim->coders)
 		return (1);
 	i = 0;
-    while (i < sim->config.number_of_coders)
-    {
-        sim->coders[i].id = i + 1;
-        sim->coders[i].thread = 0;
-        sim->coders[i].last_compile_time = sim->start_time;
-        sim->coders[i].compile_count = 0;
-        sim->coders[i].mutex_ready = 0;
-        sim->coders[i].sim = sim;
-        if (pthread_mutex_init(&sim->coders[i].mutex, NULL) != 0)
-            return (1);
-        sim->coders[i].mutex_ready = 1;
-        i++;
-    }
+	while (i < sim->config.number_of_coders)
+	{
+		sim->coders[i].id = i + 1;
+		sim->coders[i].thread = 0;
+		sim->coders[i].last_compile_time = sim->start_time;
+		sim->coders[i].compile_count = 0;
+		sim->coders[i].mutex_ready = 0;
+		sim->coders[i].sim = sim;
+		if (pthread_mutex_init(&sim->coders[i].mutex, NULL) != 0)
+			return (1);
+		sim->coders[i].mutex_ready = 1;
+		i++;
+	}
 	return (0);
 }
 

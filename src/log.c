@@ -21,7 +21,7 @@ void	log_state(t_sim *sim, int coder_id, char *message)
 
 int	log_burnout(t_sim *sim, int coder_id)
 {
-	long	timestamp;
+	long timestamp;
 
 	pthread_mutex_lock(&sim->log_mutex);
 	pthread_mutex_lock(&sim->state_mutex);

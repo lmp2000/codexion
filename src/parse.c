@@ -102,7 +102,7 @@ int	parse_args(int argc, char **argv, t_config *config)
 		return (1);
 	if (parse_scheduler(argv[8], &config->scheduler) != 0)
 		return (1);
-    if (validate_config(config) != 0)
-	    return (1);
+	if (validate_config(config) != 0)
+		return (1);
 	return (0);
 }

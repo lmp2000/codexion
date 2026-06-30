@@ -26,7 +26,7 @@ long	get_coder_last_compile_time(t_coder *coder)
 
 int	get_coder_compile_count(t_coder *coder)
 {
-	int	compile_count;
+	int compile_count;
 
 	pthread_mutex_lock(&coder->mutex);
 	compile_count = coder->compile_count;
