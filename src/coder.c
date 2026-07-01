@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   coder.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
 static void	coder_compile(t_coder *coder)
@@ -41,7 +53,8 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	while (!sim_should_stop(coder->sim)
-		&& get_coder_compile_count(coder) < coder->sim->config.number_of_compiles_required)
+		&& get_coder_compile_count(coder)
+		< coder->sim->config.number_of_compiles_required)
 	{
 		coder_compile(coder);
 		if (sim_should_stop(coder->sim))

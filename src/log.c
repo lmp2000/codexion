@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   log.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
 void	log_state(t_sim *sim, int coder_id, char *message)
@@ -21,7 +33,7 @@ void	log_state(t_sim *sim, int coder_id, char *message)
 
 int	log_burnout(t_sim *sim, int coder_id)
 {
-	long timestamp;
+	long	timestamp;
 
 	pthread_mutex_lock(&sim->log_mutex);
 	pthread_mutex_lock(&sim->state_mutex);

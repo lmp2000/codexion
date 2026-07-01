@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
 static int	init_coders(t_sim *sim)
@@ -30,6 +42,23 @@ static int	init_error(t_sim *sim)
 	return (1);
 }
 
+static int	init_sync(t_sim *sim)
+{
+	if (pthread_mutex_init(&sim->log_mutex, NULL) != 0)
+		return (1);
+	sim->log_mutex_ready = 1;
+	if (pthread_mutex_init(&sim->state_mutex, NULL) != 0)
+		return (init_error(sim));
+	sim->state_mutex_ready = 1;
+	if (pthread_mutex_init(&sim->scheduler_mutex, NULL) != 0)
+		return (init_error(sim));
+	sim->scheduler_mutex_ready = 1;
+	if (pthread_cond_init(&sim->scheduler_cond, NULL) != 0)
+		return (init_error(sim));
+	sim->scheduler_cond_ready = 1;
+	return (0);
+}
+
 int	init_sim(t_sim *sim, t_config *config)
 {
 	sim->config = *config;
@@ -47,18 +76,8 @@ int	init_sim(t_sim *sim, t_config *config)
 	sim->start_time = get_time_ms();
 	if (sim->start_time < 0)
 		return (1);
-	if (pthread_mutex_init(&sim->log_mutex, NULL) != 0)
+	if (init_sync(sim) != 0)
 		return (1);
-	sim->log_mutex_ready = 1;
-	if (pthread_mutex_init(&sim->state_mutex, NULL) != 0)
-		return (init_error(sim));
-	sim->state_mutex_ready = 1;
-	if (pthread_mutex_init(&sim->scheduler_mutex, NULL) != 0)
-		return (init_error(sim));
-	sim->scheduler_mutex_ready = 1;
-	if (pthread_cond_init(&sim->scheduler_cond, NULL) != 0)
-		return (init_error(sim));
-	sim->scheduler_cond_ready = 1;
 	if (init_coders(sim) != 0)
 		return (init_error(sim));
 	if (init_dongles(sim) != 0)

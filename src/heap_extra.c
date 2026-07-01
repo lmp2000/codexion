@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   heap_extra.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,27 +12,52 @@
 
 #include "codexion.h"
 
-int	main(int argc, char **argv)
+static void	rebuild_heap(t_heap *heap)
 {
-	t_config	config;
-	t_sim		sim;
+	int	child;
+	int	parent;
+	int	i;
 
-	if (parse_args(argc, argv, &config) != 0)
+	i = 1;
+	while (i < heap->size)
 	{
-		printf("Error: invalid arguments\n");
-		return (1);
+		child = i;
+		while (child > 0)
+		{
+			parent = (child - 1) / 2;
+			if (!heap_request_before(heap, heap->items[child],
+					heap->items[parent]))
+				break ;
+			heap_swap_requests(&heap->items[child], &heap->items[parent]);
+			child = parent;
+		}
+		i++;
 	}
-	if (init_sim(&sim, &config) != 0)
+}
+
+int	heap_is_empty(t_heap *heap)
+{
+	return (heap->size == 0);
+}
+
+int	heap_remove_coder(t_heap *heap, int coder_id, t_request *out)
+{
+	int	i;
+
+	i = 0;
+	while (i < heap->size)
 	{
-		printf("Error: simulation init failed\n");
-		return (1);
+		if (heap->items[i].coder_id == coder_id)
+		{
+			if (out)
+				*out = heap->items[i];
+			heap->size--;
+			if (i < heap->size)
+				heap->items[i] = heap->items[heap->size];
+			rebuild_heap(heap);
+			return (0);
+		}
+		i++;
 	}
-	if (start_simulation(&sim) != 0)
-	{
-		printf("Error: simulation failed\n");
-		destroy_sim(&sim);
-		return (1);
-	}
-	destroy_sim(&sim);
-	return (0);
+	return (1);
 }

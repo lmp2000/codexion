@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   coder_state.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
 void	update_coder_compile_state(t_coder *coder)
@@ -26,7 +38,7 @@ long	get_coder_last_compile_time(t_coder *coder)
 
 int	get_coder_compile_count(t_coder *coder)
 {
-	int compile_count;
+	int	compile_count;
 
 	pthread_mutex_lock(&coder->mutex);
 	compile_count = coder->compile_count;

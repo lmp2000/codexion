@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   simulation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
 static int	create_coder_threads(t_sim *sim, int *created_count)
@@ -37,7 +49,7 @@ static void	join_coder_threads(t_sim *sim, int count)
 
 int	start_simulation(t_sim *sim)
 {
-	int created_count;
+	int	created_count;
 
 	if (create_coder_threads(sim, &created_count) != 0)
 	{

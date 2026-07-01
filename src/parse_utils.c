@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor.c                                          :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,57 +12,60 @@
 
 #include "codexion.h"
 
-static int	all_coders_completed(t_sim *sim)
+int	codexion_strcmp(const char *s1, const char *s2)
 {
 	int	i;
 
 	i = 0;
-	while (i < sim->config.number_of_coders)
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+static int	is_digit_string(const char *str)
+{
+	int	i;
+
+	if (!str || !str[0])
+		return (0);
+	i = 0;
+	while (str[i])
 	{
-		if (get_coder_compile_count(&sim->coders[i])
-			< sim->config.number_of_compiles_required)
+		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static int	check_burnout(t_sim *sim)
+int	parse_positive_long(const char *str, long *out)
 {
+	long	result;
 	int		i;
-	long	now;
-	long	last_compile_time;
 
+	if (!is_digit_string(str))
+		return (1);
+	result = 0;
 	i = 0;
-	now = get_time_ms();
-	while (i < sim->config.number_of_coders)
+	while (str[i])
 	{
-		last_compile_time = get_coder_last_compile_time(&sim->coders[i]);
-		if (now - last_compile_time >= sim->config.time_to_burnout)
-		{
-			log_burnout(sim, sim->coders[i].id);
+		if (result > (LONG_MAX - (str[i] - '0')) / 10)
 			return (1);
-		}
+		result = result * 10 + (str[i] - '0');
 		i++;
 	}
+	*out = result;
 	return (0);
 }
 
-void	*monitor_routine(void *arg)
+int	parse_positive_int(const char *str, int *out)
 {
-	t_sim	*sim;
+	long	value;
 
-	sim = (t_sim *)arg;
-	while (!sim_should_stop(sim))
-	{
-		if (check_burnout(sim))
-			return (NULL);
-		if (all_coders_completed(sim))
-		{
-			set_sim_stop(sim);
-			return (NULL);
-		}
-		usleep(1000);
-	}
-	return (NULL);
+	if (parse_positive_long(str, &value) != 0)
+		return (1);
+	if (value > INT_MAX)
+		return (1);
+	*out = (int)value;
+	return (0);
 }

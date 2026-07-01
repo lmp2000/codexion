@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lude-jes <lude-jes@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/01 00:00:00 by lude-jes          #+#    #+#             */
+/*   Updated: 2026/07/01 15:47:10 by lude-jes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
-void	destroy_sim(t_sim *sim)
+static void	destroy_coders(t_sim *sim)
 {
-	int i;
+	int	i;
 
-	heap_destroy(&sim->scheduler);
-	destroy_dongles(sim);
 	if (sim->coders)
 	{
 		i = 0;
@@ -18,6 +28,13 @@ void	destroy_sim(t_sim *sim)
 		free(sim->coders);
 		sim->coders = NULL;
 	}
+}
+
+void	destroy_sim(t_sim *sim)
+{
+	heap_destroy(&sim->scheduler);
+	destroy_dongles(sim);
+	destroy_coders(sim);
 	if (sim->scheduler_cond_ready)
 	{
 		pthread_cond_destroy(&sim->scheduler_cond);
