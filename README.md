@@ -256,3 +256,4 @@ AI usage:
 - AI was used to describe the synchronization design in clear English.
 - AI was not treated as a source of truth for correctness; the README was written
   based on the local subject PDF and the project source files.
+- Norminette compliance
